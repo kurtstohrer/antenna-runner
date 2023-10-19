@@ -4,23 +4,31 @@ import subprocess
 import sys
 import json
 import time
+from datetime import datetime
 import argparse
 import re
 
 def run_command(command):
     start_time = time.time()
+    timestamp  = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     try:
         result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT).decode('utf-8')
         execution_time = round(time.time() - start_time, 2)
         return {
+            "command": command,
             "result": result.strip(),
-            "execution_time": execution_time
+            "status": "success",
+            "execution_time": execution_time,
+            "timestamp": current_timestamp
         }
     except subprocess.CalledProcessError as e:
         execution_time = round(time.time() - start_time, 2)
         return {
+            "command": command,
+            "status": "error",
             "result": e.output.decode('utf-8').strip(),
-            "execution_time": execution_time
+            "execution_time": execution_time,
+            "timestamp": current_timestamp
         }
 
 def version():
