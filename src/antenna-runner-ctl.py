@@ -19,7 +19,7 @@ def run_command(command):
             "result": result.strip(),
             "status": "success",
             "execution_time": execution_time,
-            "timestamp": current_timestamp
+            "timestamp": timestamp
         }
     except subprocess.CalledProcessError as e:
         execution_time = round(time.time() - start_time, 2)
@@ -28,7 +28,7 @@ def run_command(command):
             "status": "error",
             "result": e.output.decode('utf-8').strip(),
             "execution_time": execution_time,
-            "timestamp": current_timestamp
+            "timestamp": timestamp
         }
 
 def version():
