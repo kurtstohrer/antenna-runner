@@ -5,6 +5,7 @@ import sys
 import json
 import time
 import argparse
+import re
 
 def run_command(command):
     start_time = time.time()
@@ -21,11 +22,6 @@ def run_command(command):
             "result": e.output.decode('utf-8').strip(),
             "execution_time": execution_time
         }
-
-def scan():
-     # Call the external script and return its response
-    script_path = "scripts/get_available_clis.sh"
-    return run_command(script_path)
 
 def version():
     # Replace with your version checking command or operations
@@ -56,5 +52,73 @@ def main():
 
     print(json.dumps(output, indent=4))
 
+
+
+
+def determine_version(message):
+    # Use regex to capture a version number pattern
+    # The pattern captures versions like: x.y.z, x.y, x.y.z.a, etc.
+    match = re.search(r'[0-9]+(\.[0-9]+)+', message)
+    if match:
+        return match.group(0)
+    return None
+
+def scan():
+    languages = {
+        "node": "node -v",
+        "npm": "npm -v",
+        "go": "go version",
+        "php": "php -v",
+        "python": "python --version",
+        "java": "java -version",
+        "rust": "rustc --version",
+        "bash": "bash --version",
+        "sqlite3": "sqlite3 --version",
+        "ruby": "ruby -v",
+        "perl": "perl -v",
+        "docker": "docker --version",
+        "docker-compose": "docker-compose --version",
+        "terraform": "terraform version",
+        "typescript": "tsc --version",
+        "awscli": "aws --version",
+        "jq": "jq --version",
+        "git": "git --version",
+        "kubectl": "kubectl version --client",
+        "ansible": "ansible --version",
+        "vagrant": "vagrant --version",
+        "mysql": "mysql --version",
+        "psql": "psql --version",
+        "mongo": "mongo --version",
+        "dotnet": "dotnet --version",
+        "helm": "helm version --client",
+        "az": "az --version",
+        "gcloud": "gcloud --version",
+        "vault": "vault version",
+    }
+
+    result = {}
+
+    for lang, cmd in languages.items():
+        try:
+            # Run the command and decode the output
+            message = subprocess.check_output(cmd, stderr=subprocess.DEVNULL, shell=True).decode().strip()
+            version = determine_version(message)
+            
+            # If both the message and version are non-empty, include them in the result
+            if message and version:
+                result[lang] = {
+                    "message": message,
+                    "version": version
+                }
+        except subprocess.CalledProcessError:
+            # If command failed, continue to the next one
+            continue
+    
+    return result
+
 if __name__ == "__main__":
     main()
+
+
+
+
