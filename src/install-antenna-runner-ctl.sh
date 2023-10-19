@@ -9,4 +9,4 @@ mv antenna-runner-ctl.py antenna-runner-ctl
 chmod +x antenna-runner-ctl
 
 # Step 4: Move the script to /usr/local/bin so that it's in the PATH and can be executed from anywhere
-sudo mv antenna-runner-ctl /usr/local/bin/
+mv antenna-runner-ctl /usr/local/bin/
