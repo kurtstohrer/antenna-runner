@@ -12,12 +12,22 @@ def run_command(command):
     start_time = time.time()
     timestamp  = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     try:
-        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT).decode('utf-8')
+        raw_result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT).decode('utf-8')
         execution_time = round(time.time() - start_time, 2)
+        
+        # Try to jsonify the result
+        try:
+            jsonified_result = json.loads(raw_result)
+            result_type = 'json'
+        except json.JSONDecodeError:
+            jsonified_result = raw_result.strip()
+            result_type = 'text'
+
         return {
             "command": command,
-            "result": result.strip(),
+            "result": jsonified_result,
             "status": "success",
+            "result_type": result_type,
             "execution_time": execution_time,
             "timestamp": timestamp
         }
