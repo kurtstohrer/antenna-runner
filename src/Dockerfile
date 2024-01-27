@@ -1,22 +1,24 @@
-# Pull a base image, Python 3.12.1 in this case
+# Pull a base image, Python 3.8 in this case
 FROM python:3.12.1-slim-bullseye
 
 # Create a directory in the container where the code will reside
 WORKDIR /app
 
-# Install system dependencies required for pygit2
-# This includes git, libgit2-dev, cmake, and build-essential
-RUN apt-get update && \
-    apt-get install -y git libgit2-dev cmake build-essential && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y gcc build-essential
 
 # Copy the dependencies file to the working directory
 COPY ./app/requirements.txt .
 
-# Install any Python dependencies
+# Install any dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install kubectl, docker, curl, wget, unzip, and bash
+
+# Install Git
+RUN apt-get update && \
+    apt-get install -y git && \
+    rm -rf /var/lib/apt/lists/*
+    
+#install kubectl, docker, curl, wget, unzip, and bash
 RUN apt-get update && \
     apt-get install -y curl wget unzip apt-transport-https ca-certificates gnupg-agent software-properties-common && \
     curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
