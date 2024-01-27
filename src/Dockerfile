@@ -1,5 +1,5 @@
 # Pull a base image, Python 3.8 in this case
-FROM python:3.12.1-slim-bullseye
+FROM python:3.8-slim-buster
 
 # Create a directory in the container where the code will reside
 WORKDIR /app
