@@ -1,10 +1,21 @@
 # Pull a base image, Python 3.8 in this case
-FROM python:3.8-slim-buster
+FROM ubuntu:20.04
 
+ENV DEBIAN_FRONTEND=noninteractive
 # Create a directory in the container where the code will reside
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y gcc build-essential
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    unzip \
+    apt-transport-https \
+    ca-certificates \
+    gnupg-agent \
+    software-properties-common
+
+# Install Python3
+RUN apt-get install -y python3 python3-pip
 
 # Copy the dependencies file to the working directory
 COPY ./app/requirements.txt .
