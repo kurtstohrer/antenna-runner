@@ -3,8 +3,7 @@ FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Create a directory in the container where the code will reside
-WORKDIR /app
+
 
 # Install necessary packages
 RUN apt-get update && apt-get install -y \
@@ -32,6 +31,9 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
 
 # Clear the apt cache to reduce image size
 RUN rm -rf /var/lib/apt/lists/*
+
+# Create a directory in the container where the code will reside
+WORKDIR /app
 
 # Copy the dependencies file to the working directory
 COPY ./app/requirements.txt .
