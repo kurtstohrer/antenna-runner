@@ -119,12 +119,16 @@ async def test_connection(websocket_uri: str):
 async def startup_event():
     websocket_uri = f"ws://{os.getenv('ANTENNA_ADDR')}/ws"  # Replace with your 
     #ws_connected = await test_connection(websocket_uri)
+    print("Starting antenna runner...")
     if  os.path.exists("storage"):
         utils.files.rmdir("storage", True)
+    print("Cloning storage repo...")
     utils.github.clone_repo(os.getenv("GITHUB_ANTENNA_STORAGE_REPO_NAME"), "storage")
    
+    print("Running runner scan...")
     antenna_runner.scan()
 
+    print("Attempting to register runner...")
     register = await register_runner()
     store.scheduler.add_job(ping_antenna, 'interval', seconds=60, args=[websocket_uri])
     store.scheduler.start()
@@ -133,7 +137,7 @@ async def startup_event():
     
 
    
-    
+    print("Starting event consumer...")
     utils.rabbitmq.client.consume(os.getenv("RABBITMQ_EVENT_QUEUE_NAME"),rabbitmq_callback)
 
 @app.on_event("shutdown")
