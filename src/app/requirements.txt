@@ -18,3 +18,4 @@ pygit2==1.12.1
 pydantic==1.10.2
 uvicorn==0.20.0
 asyncio==3.4.3
+websockets==10.1
