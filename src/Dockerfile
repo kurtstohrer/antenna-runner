@@ -3,8 +3,6 @@ FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-
-
 # Install necessary packages
 RUN apt-get update && apt-get install -y \
     python3 \
@@ -43,6 +41,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the source code of the application to the working directory
 COPY ./app/ .
+
+# Set the entrypoint to run uvicorn command
+ENTRYPOINT ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
 
 # The command to run when the container starts
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
