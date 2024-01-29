@@ -45,5 +45,3 @@ COPY ./app/ .
 # Set the entrypoint to run uvicorn command
 ENTRYPOINT ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
 
-# The command to run when the container starts
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
