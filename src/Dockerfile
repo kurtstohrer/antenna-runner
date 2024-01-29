@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     gnupg-agent \
     software-properties-common \
     git \
+    jq \
     bash
 
 # Install Docker and Kubectl

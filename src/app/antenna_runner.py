@@ -92,8 +92,14 @@ def get_unsupported_clis_from_command(command):
     return unsupported_clis
 
 def get_clis_from_command(command):
-    # Split the command into blocks separated by '&&', '|', and ';'
-    blocks = re.split(r'&&|\||;', command)
+    # Regex pattern to split by '&&', '|', and ';' that are not inside quotes
+    pattern = r'''"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|&&|\||;'''
+
+    # Split the command using the custom regex pattern
+    parts = re.split(pattern, command)
+
+    # Filter out empty strings and quoted strings
+    blocks = [part for part in parts if part.strip() and not part.startswith(("'", '"'))]
 
     clis = []
 
